@@ -1,14 +1,17 @@
 import redis
 import boto3
-from rediscluster import RedisCluster
+from rediscluster import StrictRedisCluster
+
 
 def lambda_handler(event, context):
         # single redis node
         # redis_client = redis.Redis(host="clusterforlambdatest.a9ith3.0001.usw2.cache.amazonaws.com", port=6379)
 
+
         # redis cluster 
-        startup_nodes = [{"host": "clusterforlambdatest.a9ith3.0001.usw2.cache.amazonaws.com", "port": "6379"}]
-        redis_client = RedisCluster(startup_nodes=startup_nodes, decode_responses=True)
+        startup_nodes = [{"host": "rediscluster-0001-001.a9ith3.0001.usw2.cache.amazonaws.com", "port": "6379"}]
+        redis_client = StrictRedisCluster(startup_nodes=startup_nodes, decode_responses=True, skip_full_coverage_check=True)
+
 
         redis_client.set("foo", "a")
 	r = redis_client.get("foo")
